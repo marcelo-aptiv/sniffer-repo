@@ -43,8 +43,8 @@ public class ActuatorDto {
   public String[] toCSV() {
     String[] columns = new String[HEADER.length];
     columns[0] = serviceDto.getService().getName().toLowerCase();
-    columns[1] = serviceDto.getEnvironment().name().toLowerCase();
-    columns[2] = serviceDto.getUrl();
+    columns[1] = serviceDto.getEnvironment().getName();
+    columns[2] = serviceDto.getActuator();
 
     if (Objects.nonNull(git)) {
       columns[3] = git.getBranch();

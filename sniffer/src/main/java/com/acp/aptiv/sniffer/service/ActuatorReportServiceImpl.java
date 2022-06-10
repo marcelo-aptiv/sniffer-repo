@@ -53,17 +53,17 @@ public class ActuatorReportServiceImpl implements ActuatorReportService {
             return serviceDto.getService().equals(serviceName);
           })
           .map(serviceDto -> {
-            log.info("Calling {} {} - {}", serviceDto.getEnvironment(), serviceDto.getService(), serviceDto.getUrl());
+            log.info("Hitting Service: {} {} - {}", serviceDto.getEnvironment().getName(), serviceDto.getService(), serviceDto.getActuator());
             try {
               var responseEntity = restTemplate
-                  .exchange(serviceDto.getUrl(), HttpMethod.GET, null,
+                  .exchange(serviceDto.getActuator(), HttpMethod.GET, null,
                       new ParameterizedTypeReference<ActuatorDto>() {
                       });
               var actuatorDto = responseEntity.getBody();
               actuatorDto.setServiceDto(serviceDto);
               return actuatorDto;
             } catch (Exception e) {
-              log.error("Error triggering: {} - {}", serviceDto.getUrl(), e.getMessage());
+              log.error("Error triggering: {} - {}", serviceDto.getActuator(), e.getMessage());
               return new ActuatorDto(serviceDto, e.getMessage());
             }
           })

@@ -18,14 +18,14 @@ public class ServiceDto {
   private EEnvironment environment;
   private Integer order;
 
-  public String getUrl() {
+  public String getActuator() {
     if (environment.equals(PROD)) {
       return format("https://api.aptivconnect.app/%s/actuator/info", service.getActuator());
     }
     if (service.isCdtEnv() && environment.equals(EEnvironment.DEV)) {
       return format("https://cdt.api.aptivconnect.app/%s/actuator/info", service.getActuator());
     }
-    return format("https://%s.api.aptivconnect.app/%s/actuator/info", environment, service.getActuator());
+    return format("https://%s.api.aptivconnect.app/%s/actuator/info", environment.getName(), service.getActuator());
   }
 
   public String getName() {
