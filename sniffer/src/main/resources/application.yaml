@@ -3,4 +3,4 @@ application:
   version: 1.0
 
 server:
-  port: 8088
+  port: 8080

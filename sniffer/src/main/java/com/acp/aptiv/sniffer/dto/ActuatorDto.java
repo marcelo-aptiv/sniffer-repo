@@ -77,12 +77,16 @@ public class ActuatorDto {
   public String getRepository() {
     String repoUrl = "https://github.com/AptivConnectedServices/" + serviceDto.getService().getGitRepo();
     if (Objects.nonNull(git)) {
-      if ("main".equals(git.getBranch())) {
-        return "In Sync";
-      }
       return  repoUrl + "/compare/main..." + git.getBranch();
     }
     return repoUrl;
+  }
+
+  public boolean isSynced() {
+    if (Objects.nonNull(git)) {
+      return "main".equals(git.getBranch());
+    }
+    return false;
   }
 
   @JsonIgnore

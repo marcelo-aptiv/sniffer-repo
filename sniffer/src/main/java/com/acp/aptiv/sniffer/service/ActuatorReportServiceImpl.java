@@ -1,5 +1,7 @@
 package com.acp.aptiv.sniffer.service;
 
+import static com.acp.aptiv.sniffer.util.EEnvironment.*;
+
 import com.acp.aptiv.sniffer.dto.ActuatorDto;
 import com.acp.aptiv.sniffer.dto.ServiceDto;
 import com.acp.aptiv.sniffer.util.EEnvironment;
@@ -29,10 +31,10 @@ public class ActuatorReportServiceImpl implements ActuatorReportService {
     SERVICES = new HashSet<>();
 
     Stream.of(EService.values()).forEach(serviceName -> {
-      SERVICES.add(new ServiceDto(serviceName, EEnvironment.DEV, 1));
-      SERVICES.add(new ServiceDto(serviceName, EEnvironment.QA, 2));
-      SERVICES.add(new ServiceDto(serviceName, EEnvironment.RELEASE, 3));
-      SERVICES.add(new ServiceDto(serviceName, EEnvironment.PROD, 4));
+      SERVICES.add(new ServiceDto(serviceName, DEV, 1));
+      SERVICES.add(new ServiceDto(serviceName, RELEASE, 2));
+      SERVICES.add(new ServiceDto(serviceName, QA, 3));
+      SERVICES.add(new ServiceDto(serviceName, PROD, 4));
     });
   }
 
