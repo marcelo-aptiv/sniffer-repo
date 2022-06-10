@@ -18,4 +18,12 @@ public class ServiceDto {
   public String getUrl() {
     return format("https://%s.api.aptivconnect.app/%s/actuator/info", environment, service.getActuator());
   }
+
+  public String getName() {
+    return service.getName();
+  }
+
+  public String getSquad() {
+    return service.getSquad().name();
+  }
 }

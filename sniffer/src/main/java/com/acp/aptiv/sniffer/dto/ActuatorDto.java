@@ -1,12 +1,9 @@
 package com.acp.aptiv.sniffer.dto;
 
-import static java.lang.String.format;
-
 import com.acp.aptiv.sniffer.dto.util.Git;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Comparator;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,8 +73,11 @@ public class ActuatorDto {
     return columns;
   }
 
-  public String getGitUrl() {
+  public String getRepository() {
     if (Objects.nonNull(git)) {
+      if ("main".equals(git.getBranch())) {
+        return "In Sync";
+      }
       return "https://github.com/AptivConnectedServices/acp-api-"
           + serviceDto.getService().getName().toLowerCase() + "/compare/main..." + git.getBranch();
     }
