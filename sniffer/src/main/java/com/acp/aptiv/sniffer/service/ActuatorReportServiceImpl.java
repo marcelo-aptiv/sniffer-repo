@@ -2,6 +2,7 @@ package com.acp.aptiv.sniffer.service;
 
 import com.acp.aptiv.sniffer.dto.ActuatorDto;
 import com.acp.aptiv.sniffer.dto.ServiceDto;
+import com.acp.aptiv.sniffer.util.EEnvironment;
 import com.acp.aptiv.sniffer.util.EService;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -28,10 +29,10 @@ public class ActuatorReportServiceImpl implements ActuatorReportService {
     SERVICES = new HashSet<>();
 
     Stream.of(EService.values()).forEach(serviceName -> {
-      SERVICES.add(new ServiceDto(serviceName, "dev"));
-      SERVICES.add(new ServiceDto(serviceName, "cdt"));
-      SERVICES.add(new ServiceDto(serviceName, "qa"));
-      SERVICES.add(new ServiceDto(serviceName, "release"));
+      SERVICES.add(new ServiceDto(serviceName, EEnvironment.DEV, 1));
+      SERVICES.add(new ServiceDto(serviceName, EEnvironment.QA, 2));
+      SERVICES.add(new ServiceDto(serviceName, EEnvironment.RELEASE, 3));
+      SERVICES.add(new ServiceDto(serviceName, EEnvironment.PROD, 4));
     });
   }
 
@@ -40,6 +41,10 @@ public class ActuatorReportServiceImpl implements ActuatorReportService {
   @Override
   public List<ActuatorDto> process(EService serviceName) {
     try {
+      Comparator<ActuatorDto> actuatorDtoComparator = Comparator
+          .comparing(ActuatorDto::getServiceName)
+          .thenComparing(ActuatorDto::getServiceEnvironment);
+
       return SERVICES.parallelStream()
           .filter(serviceDto -> {
             if (Objects.isNull(serviceName)) {
@@ -62,7 +67,7 @@ public class ActuatorReportServiceImpl implements ActuatorReportService {
               return new ActuatorDto(serviceDto, e.getMessage());
             }
           })
-          .sorted(Comparator.comparing(actuatorDto -> actuatorDto.getServiceDto().getService()))
+          .sorted(actuatorDtoComparator)
           .collect(Collectors.toList());
     } catch (Exception e) {
       e.printStackTrace();

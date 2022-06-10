@@ -1,6 +1,7 @@
 package com.acp.aptiv.sniffer.dto;
 
 import com.acp.aptiv.sniffer.dto.util.Git;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -42,7 +43,7 @@ public class ActuatorDto {
   public String[] toCSV() {
     String[] columns = new String[HEADER.length];
     columns[0] = serviceDto.getService().getName().toLowerCase();
-    columns[1] = serviceDto.getEnvironment().toUpperCase();
+    columns[1] = serviceDto.getEnvironment().name().toLowerCase();
     columns[2] = serviceDto.getUrl();
 
     if (Objects.nonNull(git)) {
@@ -74,13 +75,23 @@ public class ActuatorDto {
   }
 
   public String getRepository() {
+    String repoUrl = "https://github.com/AptivConnectedServices/" + serviceDto.getService().getGitRepo();
     if (Objects.nonNull(git)) {
       if ("main".equals(git.getBranch())) {
         return "In Sync";
       }
-      return "https://github.com/AptivConnectedServices/acp-api-"
-          + serviceDto.getService().getName().toLowerCase() + "/compare/main..." + git.getBranch();
+      return  repoUrl + "/compare/main..." + git.getBranch();
     }
-    return "";
+    return repoUrl;
+  }
+
+  @JsonIgnore
+  public String getServiceName() {
+    return serviceDto.getName();
+  }
+
+  @JsonIgnore
+  public Integer getServiceEnvironment() {
+    return serviceDto.getOrder();
   }
 }
