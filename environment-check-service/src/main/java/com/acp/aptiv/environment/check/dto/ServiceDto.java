@@ -1,0 +1,38 @@
+package com.acp.aptiv.environment.check.dto;
+
+import static com.acp.aptiv.environment.check.util.EEnvironment.PROD;
+import static java.lang.String.format;
+
+import com.acp.aptiv.environment.check.util.EEnvironment;
+import com.acp.aptiv.environment.check.util.EService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ServiceDto {
+
+  private EService service;
+  private EEnvironment environment;
+  private Integer order;
+
+  public String getActuator() {
+    if (environment.equals(PROD)) {
+      return format("https://api.aptivconnect.app/%s/actuator/info", service.getActuator());
+    }
+    if (service.isCdtEnv() && environment.equals(EEnvironment.DEV)) {
+      return format("https://cdt.api.aptivconnect.app/%s/actuator/info", service.getActuator());
+    }
+    return format("https://%s.api.aptivconnect.app/%s/actuator/info", environment.getName(), service.getActuator());
+  }
+
+  public String getName() {
+    return service.getName();
+  }
+
+  public String getSquad() {
+    return service.getSquad().name();
+  }
+}
